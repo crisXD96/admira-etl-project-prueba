@@ -1,0 +1,19 @@
+﻿services:
+  admira-etl:
+    build: .
+    ports:
+      - "8080:8080"
+    environment:
+      - ADS_API_URL=https://mocki.io/v1/9dcc2981-2bc8-465a-bce3-47767e1278e6
+      - CRM_API_URL=https://mocki.io/v1/6a064f10-829d-432c-9f0d-24d5b8cb71c7
+      - SINK_URL=
+      - SINK_SECRET=admira_secret_example
+      - PORT=8080
+      - LOG_LEVEL=info
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:8080/healthz"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
